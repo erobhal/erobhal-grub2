@@ -1,0 +1,13 @@
+# This file is managed with Puppet
+# Please do not edit!!
+#
+cat <<EOF
+<% if @superuser_name -%>
+set superusers="<%= @superuser_name %>"
+<% if @superuser_pw_pbkdf2 -%>
+password_pbkdf2 <%= @superuser_name %> <%= @superuser_pw_pbkdf2 %>
+<% else -%>
+password <%= @superuser_name %> <%= @superuser_pw_clear %>
+<% end -%>
+<% end -%>
+EOF

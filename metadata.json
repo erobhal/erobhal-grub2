@@ -1,0 +1,22 @@
+{
+  "name": "erobhal-grub2",
+  "version": "1.0.15",
+  "author": "Robert Hallgren",
+  "summary": "Handle grub2 on Linux",
+  "license": "Apache 2.0",
+  "source": "git@github.com:/erobhal/puppet-module-grub2.git",
+  "project_page": "https://github.com/erobhal/puppet-module-grub2",
+  "issues_url": "https://github.com/erobhal/puppet-module-grub2/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_range": ">= 1.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": ["7"]
+    }
+  ]
+}

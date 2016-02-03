@@ -1,0 +1,33 @@
+# This file is being maintained by Puppet.
+# DO NOT EDIT
+
+<% if @timeout -%>
+GRUB_TIMEOUT=<%= @timeout %>
+<% end -%>
+<% if @default -%>
+GRUB_DEFAULT=<%= @default %>
+<% end -%>
+<% if @savedefault -%>
+GRUB_SAVEDEFAULT=<%= @savedefault %>
+<% end -%>
+<% if @disable_submenu -%>
+GRUB_DISABLE_SUBMENU=<%= @disable_submenu %>
+<% end -%>
+<% if @serial_command -%>
+GRUB_SERIAL_COMMAND="<%= @serial_command %>"
+<% end -%>
+<% if @terminal -%>
+GRUB_TERMINAL="<%= @terminal %>"
+<% end -%>
+<% if @terminal_input -%>
+GRUB_TERMINAL_INPUT="<%= @terminal_input %>"
+<% end -%>
+<% if @terminal_output -%>
+GRUB_TERMINAL_OUTPUT="<%= @terminal_output %>"
+<% end -%>
+<% if @cmdline_linux_base -%>
+GRUB_CMDLINE_LINUX="<%if @all_cmdline_linux_extra -%><% @all_cmdline_linux_extra.sort.each do |item| -%><%= item %> <% end -%><% end -%><%if @cmdline_linux_crashkernel -%>crashkernel=<%= @cmdline_linux_crashkernel %> <% end -%><%= @cmdline_linux_base %>"
+<% end -%>
+<% if @disable_recovery -%>
+GRUB_DISABLE_RECOVERY="<%= @disable_recovery %>"
+<% end -%>
