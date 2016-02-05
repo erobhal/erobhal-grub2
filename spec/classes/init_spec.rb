@@ -121,9 +121,16 @@ EOF
       end
     end
 
+    it do
+      should contain_file('/etc/sysconfig/grub').with({
+        'ensure' => 'link',
+        'target' => '/etc/default/grub',
+      }).that_requires('File[/etc/default/grub]')
+    end
+
     context 'using bios' do
-    let(:params) { {
-      :efi_enabled => false,
+    let(:facts) { {
+      :efi_boot => false,
     } }
       it do
         should contain_exec('mkconfig_grub2').with({
@@ -134,8 +141,8 @@ EOF
     end
 
     context 'using efi' do
-    let(:params) { {
-      :efi_enabled => true,
+    let(:facts) { {
+      :efi_boot => true,
     } }
       it do
         should contain_exec('mkconfig_grub2').with({
@@ -145,18 +152,10 @@ EOF
       end
     end
 
-    it do
-      should contain_file('/etc/sysconfig/grub').with({
-        'ensure' => 'link',
-        'target' => '/etc/default/grub',
-      }).that_requires('File[/etc/default/grub]')
-    end
-
-
-
     it { should compile.with_all_deps }
 
   end
+
   describe 'not on RedHat 7' do
     let(:facts) { {
       :operatingsystem => 'WrongOS',
