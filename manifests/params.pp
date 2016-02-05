@@ -22,7 +22,6 @@ class grub2::params {
   }
 
   if ($::operatingsystem == 'RedHat' and $::operatingsystemmajrelease == '7') {
-    $efi_enabled          = false
     $cmdline_linux_base   = 'rd.lvm.lv=sysvg/lv_swap biosdevname=0 rd.lvm.lv=sysvg/lv_root rhgb quiet'
     $timeout              = '5'
     $default              = 'saved'

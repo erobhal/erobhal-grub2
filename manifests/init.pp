@@ -12,7 +12,6 @@
 #
 
 class grub2 (
-  $efi_enabled                  = $grub2::params::efi_enabled,
   $config_template              = $grub2::params::config_template,
   $users_template               = $grub2::params::users_template,
   $superuser_name               = $grub2::params::superuser_name,
@@ -33,14 +32,11 @@ class grub2 (
 
   if ($::operatingsystem == 'RedHat' and $::operatingsystemmajrelease == '7') {
 
-    $mkconfig_output_bios = '/boot/grub2/grub.cfg'
-    $mkconfig_output_efi = '/boot/efi/EFI/redhat/grub.cfg'
-
-    if ($efi_enabled == true) {
-      $mkconfig_output = $mkconfig_output_efi
+    if ($::efi_boot == 'true') {
+      $mkconfig_output = '/boot/efi/EFI/redhat/grub.cfg'
     }
     else {
-      $mkconfig_output = $mkconfig_output_bios
+      $mkconfig_output = '/boot/grub2/grub.cfg'
     }
 
     file {'/etc/default/grub':
