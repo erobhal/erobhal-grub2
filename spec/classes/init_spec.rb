@@ -130,7 +130,9 @@ EOF
 
     context 'using bios' do
     let(:facts) { {
-      :efi_boot => false,
+      :operatingsystem => 'RedHat',
+      :operatingsystemmajrelease => '7',
+      :efi_boot => 'false',
     } }
       it do
         should contain_exec('mkconfig_grub2').with({
@@ -142,7 +144,9 @@ EOF
 
     context 'using efi' do
     let(:facts) { {
-      :efi_boot => true,
+      :operatingsystem => 'RedHat',
+      :operatingsystemmajrelease => '7',
+      :efi_boot => 'true',
     } }
       it do
         should contain_exec('mkconfig_grub2').with({

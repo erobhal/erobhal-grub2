@@ -32,7 +32,7 @@ class grub2 (
 
   if ($::operatingsystem == 'RedHat' and $::operatingsystemmajrelease == '7') {
 
-    if ($::efi_boot == 'true') {
+    if (str2bool("${::efi_boot}")) {
       $mkconfig_output = '/boot/efi/EFI/redhat/grub.cfg'
     }
     else {

@@ -3,9 +3,9 @@
 Facter.add('efi_boot') do
   setcode do
     if File.directory? "/boot/efi"
-      true
+      "true"
     else
-      false
+      "false"
     end
   end
 end
