@@ -15,48 +15,84 @@ configuration.
 ## Parameters
 
 #### config_template
- - Internal. Puppet template to use
- - **STRING** : *'grub2/grub.erb'*
+- Internal. Puppet template to use
+- **STRING** : *'grub2/grub.erb'*
 
 #### all_cmdline_linux_extra
- - Internal. Used to flatten hiera_array into string
- - **STRING** : *Empty by default*
+- Internal. Used to flatten hiera_array into string
+- **STRING** : *Empty by default*
 
 #### cmdline_linux_extra
 - Aditional parameters to add to CMDLINE_LINUX 
-- **Hiera array** : *Empty by default*
+- **ARRAY** : *Empty by default*
 
 #### cmdline_linux_base
 - Base parameters to add to CMDLINE_LINUX
 - **STRING** : *OS specific*
 
 #### timeout
-- Number of seconds that menu will appear
-- **STRING** : *5*
+- Number of seconds that the menu will be visible.
+- **STRING** : *'5'*
+
+#### hidden_timeout
+- Wait this many seconds for the user to press a key. During this period
+  no menu is shown unless the user presses a key. If no key is pressed,
+  control is passed to GRUB _TIMEOUT when the GRUB_HIDDEN_TIMEOUT expires.
+- **STRING** : *Empty by default*
+
+#### hidden_timeout_quiet
+- Valid settings: true/false. Determines whether a countdown timer is displayed
+  on a blank screen when using the GRUB_HIDDEN_TIMEOUT feature.
+- **BOOLEAN** : *Empty by default*
 
 #### default
-- Default boot entry. You probably don't want to change this.
-- **STRING** : *saved*
+- Default boot entry. Setting it to 'saved' enables the "grub2-reboot"
+  and "grub2-set-default" commands to set the default OS for future boots.
+- **STRING** : *'saved'*
+
+#### savedefault
+- Valid settings: true/false. If set to true this setting will automatically
+  set the last selected OS from the menu as the default OS on the next boot.
+- **BOOLEAN** : *false*
+
+#### background
+- Sets the background image, enter the full path to the image here.
+- **STRING** : *Empty by default*
+
+#### terminal
+- Set to 'console' to disable graphical terminal.
+- **STRING** : *Empty by default*
+
+#### terminal_input
+- tbd
+- **STRING** : *Empty by default*
 
 #### terminal_output
 - Terminal output.
 - **STRING** : *console*
 
 #### disable_recovery
-- tbd
-- **STRING** : *true*
+- Valid settings: true/false.
+- **BOOLEAN** : *true*
 
 #### disable_submeny
-- tbd
-- **STRING** : *true*
+- Valid settings: true/false.
+- **BOOLEAN** : *'true'*
+
+#### disable_os_prober
+ - Valid settings: true/false. This entry is used to prevent GRUB from adding the
+   results of os-prober to the menu. A value of "true" disables the os-prober
+   check of other partitions for operating systems, including Windows, Linux,
+   OSX and Hurd, during execution of the update-grub command.
+ - **BOOLEAN** : *true*
 
 ### Example
 ```ruby
     class { 'grub2':
       cmdline_linux_base    => 'rd.lvm.lv=sysvg/lv_swap biosdevname=0 rd.lvm.lv=sysvg/lv_root rhgb quiet',
       timeout               => '5',
-      disable_recovery      => 'true',
-      disable_submenu       => 'true'
+      disable_recovery      => true,
+      disable_submenu       => true
     }
 ```
 ### Hiera support

@@ -20,14 +20,18 @@ class grub2 (
   $cmdline_linux_base           = $grub2::params::cmdline_linux_base,
   $all_cmdline_linux_extra      = $grub2::params::all_cmdline_linux_extra,
   $timeout                      = $grub2::params::timeout,
+  $hidden_timeout               = $grub2::params::hidden_timeout,
+  $hidden_timeout_quiet         = str2bool("${grub2::params::hidden_timeout_quiet}"),
   $default                      = $grub2::params::default,
-  $savedefault                  = $grub2::params::savedefault,
+  $savedefault                  = str2bool("${grub2::params::savedefault}"),
+  $background                   = $grub2::params::background,
   $serial_command               = $grub2::params::serial_command,
   $terminal                     = $grub2::params::terminal,
   $terminal_input               = $grub2::params::terminal_input,
   $terminal_output              = $grub2::params::terminal_output,
-  $disable_recovery             = $grub2::params::disable_recovery,
-  $disable_submenu              = $grub2::params::disable_submenu,
+  $disable_recovery             = str2bool("${grub2::params::disable_recovery}"),
+  $disable_submenu              = str2bool("${grub2::params::disable_submenu}"),
+  $disable_os_prober            = str2bool("${grub2::params::disable_os_prober}"),
 ) inherits grub2::params {
 
   if ($::operatingsystem == 'RedHat' and $::operatingsystemmajrelease == '7') {
@@ -68,8 +72,8 @@ class grub2 (
     }
     else {
         file {'/etc/grub.d/01_users':
-          ensure  => absent,
-          notify  => Exec['mkconfig_grub2'],
+          ensure => absent,
+          notify => Exec['mkconfig_grub2'],
         }
     }
 

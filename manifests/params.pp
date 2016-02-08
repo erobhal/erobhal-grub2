@@ -24,14 +24,18 @@ class grub2::params {
   if ($::operatingsystem == 'RedHat' and $::operatingsystemmajrelease == '7') {
     $cmdline_linux_base   = 'rd.lvm.lv=sysvg/lv_swap biosdevname=0 rd.lvm.lv=sysvg/lv_root rhgb quiet'
     $timeout              = '5'
-    $default              = 'saved'
-    $savedefault          = undef
+    $hidden_timeout       = undef
+    $hidden_timeout_quiet = undef
+    $default              = saved
+    $savedefault          = false
+    $background           = undef
     $serial_command       = undef
     $terminal             = undef
     $terminal_input       = undef
-    $terminal_output      = 'console'
-    $disable_recovery     = 'true'
-    $disable_submenu      = 'true'
+    $terminal_output      = console
+    $disable_recovery     = true
+    $disable_submenu      = true
+    $disable_os_prober    = true
     $superuser_name       = undef
     $superuser_pw_clear   = undef
     $superuser_pw_pbkdf2  = undef

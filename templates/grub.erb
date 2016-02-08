@@ -4,14 +4,26 @@
 <% if @timeout -%>
 GRUB_TIMEOUT=<%= @timeout %>
 <% end -%>
+<% if @hidden_timeout -%>
+GRUB_HIDDEN_TIMEOUT=<%= @hidden_timeout %>
+<% end -%>
+<% if @hidden_timeout_quiet -%>
+GRUB_HIDDEN_TIMEOUT_QUIET=<%= @hidden_timeout_quiet %>
+<% end -%>
 <% if @default -%>
-GRUB_DEFAULT=<%= @default %>
+GRUB_DEFAULT="<%= @default %>"
 <% end -%>
 <% if @savedefault -%>
 GRUB_SAVEDEFAULT=<%= @savedefault %>
 <% end -%>
+<% if @background -%>
+GRUB_BACKGROUND="<%= @background %>"
+<% end -%>
 <% if @disable_submenu -%>
 GRUB_DISABLE_SUBMENU=<%= @disable_submenu %>
+<% end -%>
+<% if @disable_os_prober -%>
+GRUB_DISABLE_OS_PROBER=<%= @disable_os_prober %>
 <% end -%>
 <% if @serial_command -%>
 GRUB_SERIAL_COMMAND="<%= @serial_command %>"
@@ -29,5 +41,5 @@ GRUB_TERMINAL_OUTPUT="<%= @terminal_output %>"
 GRUB_CMDLINE_LINUX="<%if @all_cmdline_linux_extra -%><% @all_cmdline_linux_extra.sort.each do |item| -%><%= item %> <% end -%><% end -%><%if @cmdline_linux_crashkernel -%>crashkernel=<%= @cmdline_linux_crashkernel %> <% end -%><%= @cmdline_linux_base %>"
 <% end -%>
 <% if @disable_recovery -%>
-GRUB_DISABLE_RECOVERY="<%= @disable_recovery %>"
+GRUB_DISABLE_RECOVERY=<%= @disable_recovery %>
 <% end -%>

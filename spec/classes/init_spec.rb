@@ -20,11 +20,12 @@ describe 'grub2' do
 # DO NOT EDIT
 
 GRUB_TIMEOUT=5
-GRUB_DEFAULT=saved
+GRUB_DEFAULT="saved"
 GRUB_DISABLE_SUBMENU=true
+GRUB_DISABLE_OS_PROBER=true
 GRUB_TERMINAL_OUTPUT="console"
 GRUB_CMDLINE_LINUX="rd.lvm.lv=sysvg/lv_swap biosdevname=0 rd.lvm.lv=sysvg/lv_root rhgb quiet"
-GRUB_DISABLE_RECOVERY="true"
+GRUB_DISABLE_RECOVERY=true
 }
          ).that_notifies('Exec[mkconfig_grub2]')
 
@@ -36,14 +37,18 @@ GRUB_DISABLE_RECOVERY="true"
       :cmdline_linux_base => '*CLB*',
       :all_cmdline_linux_extra => ['*CLE_1*','*CLE_2*'],
       :timeout => '*TIO*',
+      :hidden_timeout => '*HTIO*',
+      :hidden_timeout_quiet => 'false',
       :default => '*DF*',
-      :savedefault => '*GSD*',
+      :background => '*BG*',
+      :savedefault => 'false',
       :serial_command => '*GSC*',
       :terminal => '*GT*',
       :terminal_input => '*TEI*',
       :terminal_output => '*TEO*',
-      :disable_recovery => '*DR*',
-      :disable_submenu => '*DS*',
+      :disable_recovery => 'true',
+      :disable_submenu => 'true',
+      :disable_os_prober => 'true',
     } }
       it do
         should contain_file('/etc/default/grub').with({
@@ -56,15 +61,19 @@ GRUB_DISABLE_RECOVERY="true"
 # DO NOT EDIT
 
 GRUB_TIMEOUT=*TIO*
-GRUB_DEFAULT=*DF*
-GRUB_SAVEDEFAULT=*GSD*
-GRUB_DISABLE_SUBMENU=*DS*
+GRUB_HIDDEN_TIMEOUT=*HTIO*
+GRUB_HIDDEN_TIMEOUT_QUIET=false
+GRUB_DEFAULT="*DF*"
+GRUB_SAVEDEFAULT=false
+GRUB_BACKGROUND="*BG*"
+GRUB_DISABLE_SUBMENU=true
+GRUB_DISABLE_OS_PROBER=true
 GRUB_SERIAL_COMMAND="*GSC*"
 GRUB_TERMINAL="*GT*"
 GRUB_TERMINAL_INPUT="*TEI*"
 GRUB_TERMINAL_OUTPUT="*TEO*"
 GRUB_CMDLINE_LINUX="*CLE_1* *CLE_2* *CLB*"
-GRUB_DISABLE_RECOVERY="*DR*"
+GRUB_DISABLE_RECOVERY=true
 }
          ).that_notifies('Exec[mkconfig_grub2]')
 
