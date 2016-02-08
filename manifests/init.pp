@@ -66,6 +66,12 @@ class grub2 (
         }
       }
     }
+    else {
+        file {'/etc/grub.d/01_users':
+          ensure  => absent,
+          notify  => Exec['mkconfig_grub2'],
+        }
+    }
 
 
     exec {'mkconfig_grub2':

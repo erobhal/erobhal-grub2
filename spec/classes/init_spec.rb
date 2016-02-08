@@ -121,6 +121,17 @@ EOF
       end
     end
 
+    context 'no superuser set' do
+    let (:params) { {
+      :superuser_name => :undef,
+    } }
+      it do
+        should contain_file('/etc/grub.d/01_users').with({
+          'ensure' => 'absent',
+        }).that_notifies('Exec[mkconfig_grub2]')
+      end
+    end
+
     it do
       should contain_file('/etc/sysconfig/grub').with({
         'ensure' => 'link',
