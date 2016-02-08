@@ -77,7 +77,7 @@ configuration.
 
 #### disable_submeny
 - Valid settings: true/false.
-- **BOOLEAN** : *'true'*
+- **BOOLEAN** : *true*
 
 #### disable_os_prober
  - Valid settings: true/false. This entry is used to prevent GRUB from adding the
