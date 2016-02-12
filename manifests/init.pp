@@ -73,7 +73,7 @@ class grub2 (
   if $::efi_boot != undef and is_string($::efi_boot) and $::efi_boot =~ /(?i:true|false)/ {
     $_efi_boot = str2bool($::efi_boot)
   }
-  else {
+  elsif is_bool($::efi_boot) {
     $_efi_boot = $::efi_boot
   }
 
