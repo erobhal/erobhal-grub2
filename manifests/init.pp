@@ -21,22 +21,141 @@ class grub2 (
   $all_cmdline_linux_extra      = $grub2::params::all_cmdline_linux_extra,
   $timeout                      = $grub2::params::timeout,
   $hidden_timeout               = $grub2::params::hidden_timeout,
-  $hidden_timeout_quiet         = str2bool("${grub2::params::hidden_timeout_quiet}"),
+  $hidden_timeout_quiet         = $grub2::params::hidden_timeout_quiet,
   $default                      = $grub2::params::default,
-  $savedefault                  = str2bool("${grub2::params::savedefault}"),
+  $savedefault                  = $grub2::params::savedefault,
   $background                   = $grub2::params::background,
   $serial_command               = $grub2::params::serial_command,
   $terminal                     = $grub2::params::terminal,
   $terminal_input               = $grub2::params::terminal_input,
   $terminal_output              = $grub2::params::terminal_output,
-  $disable_recovery             = str2bool("${grub2::params::disable_recovery}"),
-  $disable_submenu              = str2bool("${grub2::params::disable_submenu}"),
-  $disable_os_prober            = str2bool("${grub2::params::disable_os_prober}"),
+  $disable_recovery             = $grub2::params::disable_recovery,
+  $disable_submenu              = $grub2::params::disable_submenu,
+  $disable_os_prober            = $grub2::params::disable_os_prober,
 ) inherits grub2::params {
+
+  # Parameter sanitation
+  if $hidden_timeout_quiet != undef and is_string($hidden_timeout_quiet) and $hidden_timeout_quiet =~ /(?i:true|false)/ {
+    $_hidden_timeout_quiet = str2bool($hidden_timeout_quiet)
+  }
+  else {
+    $_hidden_timeout_quiet = $hidden_timeout_quiet
+  }
+
+  if $savedefault != undef and is_string($savedefault) and $savedefault =~ /(?i:true|false)/ {
+    $_savedefault = str2bool($savedefault)
+  }
+  else {
+    $_savedefault = $savedefault
+  }
+
+  if $disable_recovery != undef and is_string($disable_recovery) and $disable_recovery =~ /(?i:true|false)/ {
+    $_disable_recovery = str2bool($disable_recovery)
+  }
+  else {
+    $_disable_recovery = $disable_recovery
+  }
+
+  if $disable_submenu != undef and is_string($disable_submenu) and $disable_submenu =~ /(?i:true|false)/ {
+    $_disable_submenu = str2bool($disable_submenu)
+  }
+  else {
+    $_disable_submenu = $disable_submenu
+  }
+
+  if $disable_os_prober != undef and is_string($disable_os_prober) and $disable_os_prober =~ /(?i:true|false)/ {
+    $_disable_os_prober = str2bool($disable_os_prober)
+  }
+  else {
+    $_disable_os_prober = $disable_os_prober
+  }
+
+  if $::efi_boot != undef and is_string($::efi_boot) and $::efi_boot =~ /(?i:true|false)/ {
+    $_efi_boot = str2bool($::efi_boot)
+  }
+  else {
+    $_efi_boot = $::efi_boot
+  }
+
+  # Mandatory parameters
+  unless $config_template != undef and is_string($config_template) {
+    fail('Parameter config_template has wrong input type. It is mandatory and should be string.')
+  }
+  unless $users_template != undef and is_string($users_template) {
+    fail('Parameter users_template has wrong input type. It is mandatory and should be absolute string.')
+  }
+  unless $_efi_boot != undef and is_bool($_efi_boot) {
+    fail('Fact efi_boot has wrong input type. It is mandatory and should be absolute boolean.')
+  }
+
+  # Optional parameters
+  unless $superuser_name == undef or is_string($superuser_name) {
+    fail('Parameter superuser_name has wrong input type. Should be string.')
+  }
+  unless $superuser_pw_clear == undef or is_string($superuser_pw_clear) {
+    fail('Parameter superuser_pw_clear has wrong input type. Should be string.')
+  }
+  unless $superuser_pw_pbkdf2 == undef or is_string($superuser_pw_pbkdf2) {
+    fail('Parameter superuser_pw_pbkdf2 has wrong input type. Should be string.')
+  }
+  unless $cmdline_linux_base == undef or is_string($cmdline_linux_base) {
+    fail('Parameter cmdline_linux_base has wrong input type. Should be string.')
+  }
+  unless $all_cmdline_linux_extra == undef or is_array($all_cmdline_linux_extra) {
+    fail('Parameter all_cmdline_linux_extra has wrong input type. Should be array.')
+  }
+  unless $timeout == undef or is_numeric($timeout) {
+    fail('Parameter timeout has wrong input type. Should be numeric.')
+  }
+  unless $hidden_timeout == undef or is_numeric($hidden_timeout) {
+    fail('Parameter hidden_timeout has wrong input type. Should be numeric.')
+  }
+  unless $_hidden_timeout_quiet == undef or is_bool($_hidden_timeout_quiet) {
+    fail('Parameter hidden_timeout_quiet has wrong input type. Should be boolean.')
+  }
+  unless $default == undef or is_string($default) {
+    fail('Parameter default has wrong input type. Should be string.')
+  }
+  unless $_savedefault == undef or is_bool($_savedefault) {
+    fail('Parameter savedefault has wrong input type. Should be boolean.')
+  }
+  unless $background == undef or is_absolute_path($background) {
+    fail('Parameter background has wrong input type. Should be absolute path.')
+  }
+  unless $serial_command == undef or is_string($serial_command) {
+    fail('Parameter serial_command has wrong input type. Should be string.')
+  }
+  unless $terminal == undef or is_string($terminal) {
+    fail('Parameter terminal has wrong input type. Should be string.')
+  }
+  unless $terminal_input == undef or is_string($terminal_input) {
+    fail('Parameter terminal_input has wrong input type. Should be string.')
+  }
+  unless $terminal_output == undef or is_string($terminal_output) {
+    fail('Parameter terminal_output has wrong input type. Should be string.')
+  }
+  unless $_disable_recovery == undef or is_bool($_disable_recovery) {
+    fail('Parameter disable_recovery has wrong input type. Should be boolean.')
+  }
+  unless $_disable_submenu == undef or is_bool($_disable_submenu) {
+    fail('Parameter disable_submenu has wrong input type. Should be boolean.')
+  }
+  unless $_disable_os_prober == undef or is_bool($_disable_os_prober) {
+    fail('Parameter disable_os_prober has wrong input type. Should be boolean.')
+  }
+
+  if $superuser_pw_clear != undef or $superuser_pw_pbkdf2 {
+    if $superuser_name == undef {
+      fail('Parameters superuser_pw require superuser_name to be set.')
+    }
+  }
+  if $superuser_pw_clear != undef and $superuser_pw_pbkdf2 {
+    fail('Both superuser_pw_clear and superuser_pw_pbkdf2 can not be set at the same time.')
+  }
 
   if ($::operatingsystem == 'RedHat' and $::operatingsystemmajrelease == '7') {
 
-    if (str2bool("${::efi_boot}")) {
+    if ($_efi_boot) {
       $mkconfig_output = '/boot/efi/EFI/redhat/grub.cfg'
     }
     else {

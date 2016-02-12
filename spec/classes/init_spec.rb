@@ -6,6 +6,7 @@ describe 'grub2' do
     let(:facts) { {
       :operatingsystem => 'RedHat',
       :operatingsystemmajrelease => '7',
+      :efi_boot => false,
     } }
 
     context 'default params on RedHat 7' do
@@ -21,6 +22,7 @@ describe 'grub2' do
 
 GRUB_TIMEOUT=5
 GRUB_DEFAULT="saved"
+GRUB_SAVEDEFAULT=false
 GRUB_DISABLE_SUBMENU=true
 GRUB_DISABLE_OS_PROBER=true
 GRUB_TERMINAL_OUTPUT="console"
@@ -34,13 +36,15 @@ GRUB_DISABLE_RECOVERY=true
 
     context 'modified params on RedHat 7' do
     let(:params) { {
+      :config_template => 'grub2/grub.erb',
+      :users_template => 'grub2/01_users.erb',
       :cmdline_linux_base => '*CLB*',
       :all_cmdline_linux_extra => ['*CLE_1*','*CLE_2*'],
-      :timeout => '*TIO*',
-      :hidden_timeout => '*HTIO*',
+      :timeout => '5',
+      :hidden_timeout => '5',
       :hidden_timeout_quiet => 'false',
       :default => '*DF*',
-      :background => '*BG*',
+      :background => '/a/path',
       :savedefault => 'false',
       :serial_command => '*GSC*',
       :terminal => '*GT*',
@@ -60,12 +64,12 @@ GRUB_DISABLE_RECOVERY=true
 %{# This file is being maintained by Puppet.
 # DO NOT EDIT
 
-GRUB_TIMEOUT=*TIO*
-GRUB_HIDDEN_TIMEOUT=*HTIO*
+GRUB_TIMEOUT=5
+GRUB_HIDDEN_TIMEOUT=5
 GRUB_HIDDEN_TIMEOUT_QUIET=false
 GRUB_DEFAULT="*DF*"
 GRUB_SAVEDEFAULT=false
-GRUB_BACKGROUND="*BG*"
+GRUB_BACKGROUND="/a/path"
 GRUB_DISABLE_SUBMENU=true
 GRUB_DISABLE_OS_PROBER=true
 GRUB_SERIAL_COMMAND="*GSC*"
@@ -108,7 +112,7 @@ EOF
     context 'superuser with encrypted pw' do
     let(:params) { {
       :superuser_name => 'johndoe',
-      :superuser_pw_clear => 'mypassword',
+      :superuser_pw_clear => :undef,
       :superuser_pw_pbkdf2 => 'grub.pbkdf2.sha512.10000.F59BF1E6BA97FE832CD4D584B81EA81EE638BA6F07979D3B40570B38D3661A6B356783BA0CFD3B7EC808FAE8C24CEFD729BFD91B58C310B8B3A792E2BDAEB124.05CDE0ABE5B72C2EF0587EF70C38A3D0B466C38A4D664060EA88AB3B525C840428DE8F7D4052E1B32B4BDE1C0A88040FE834B530EA65B6A1DD971531CB58C911',
     } }
       it do
@@ -168,11 +172,251 @@ EOF
       :operatingsystemmajrelease => '7',
       :efi_boot => 'true',
     } }
+    let(:params) { {
+      :config_template => 'grub2/grub.erb',
+      :users_template => 'grub2/01_users.erb',
+    } }
       it do
         should contain_exec('mkconfig_grub2').with({
           'command' => '/usr/sbin/grub2-mkconfig --output=/boot/efi/EFI/redhat/grub.cfg',
           'refreshonly' => 'true',
         })
+      end
+    end
+
+    context 'sending wrong type to parameter :config_template' do
+    let(:params) { {
+      :config_template => false,
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :users_template' do
+    let(:params) { {
+      :users_template => false,
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :superuser_name' do
+    let(:params) { {
+      :superuser_name => false,
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :superuser_pw_clear' do
+    let(:params) { {
+      :superuser_pw_clear => false,
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :superuser_pw_pbkdf2' do
+    let(:params) { {
+      :superuser_pw_pbkdf2 => false,
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :cmdline_linux_base' do
+    let(:params) { {
+      :cmdline_linux_base => false,
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :all_cmdline_linux_extra' do
+    let(:params) { {
+      :all_cmdline_linux_extra => 'array',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :timeout' do
+    let(:params) { {
+      :timeout => 'thirty',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :hidden_timeout' do
+    let(:params) { {
+      :hidden_timeout => 'five',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :hidden_timeout_quiet' do
+    let(:params) { {
+      :hidden_timeout_quiet => 'yes',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :default' do
+    let(:params) { {
+      :default => false,
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :savedefault' do
+    let(:params) { {
+      :savedefault => 'yes',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :background' do
+    let(:params) { {
+      :background => 'a/path',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :serial_command' do
+    let(:params) { {
+      :serial_command => false,
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :terminal' do
+    let(:params) { {
+      :terminal => false,
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :terminal_input' do
+    let(:params) { {
+      :terminal_input => false,
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :terminal_output' do
+    let(:params) { {
+      :terminal_output => false,
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :disable_recovery' do
+    let(:params) { {
+      :disable_recovery => 'yes',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :disable_submenu' do
+    let(:params) { {
+      :disable_submenu => 'yes',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :disable_os_prober' do
+    let(:params) { {
+      :disable_os_prober => 'yes',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+
+    context 'setting :superuser_pw_clear without a :superuser_name' do
+    let(:params) { {
+      :superuser_name => :undef,
+      :superuser_pw_clear => 'someting',
+    } }
+      it '' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/require superuser_name to be set/)
+      end
+    end
+    context 'setting :superuser_pw_pbkdf2 without a :superuser_name' do
+    let(:params) { {
+      :superuser_name => :undef,
+      :superuser_pw_pbkdf2 => 'someting',
+    } }
+      it '' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/require superuser_name to be set/)
+      end
+    end
+    context 'setting both :superuser_pw_clear and :superuser_pw_pbkdf2 set' do
+    let(:params) { {
+      :superuser_name => 'somebody',
+      :superuser_pw_pbkdf2 => 'something',
+      :superuser_pw_clear => 'someting',
+    } }
+      it '' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/superuser_pw_clear and superuser_pw_pbkdf2 can not be set at the same time/)
       end
     end
 
@@ -184,6 +428,11 @@ EOF
     let(:facts) { {
       :operatingsystem => 'WrongOS',
       :operatingsystemmajrelease => '0',
+      :efi_boot => false,
+    } }
+    let(:params) { {
+      :config_template => 'grub2/grub.erb',
+      :users_template => 'grub2/01_users.erb',
     } }
     it { should contain_notify('This grub2 module supports RedHat 7, you are running WrongOS 0')}
   end

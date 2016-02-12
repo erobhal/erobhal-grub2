@@ -1,45 +1,45 @@
 # This file is being maintained by Puppet.
 # DO NOT EDIT
 
-<% if @timeout -%>
+<% if defined?(@timeout) -%>
 GRUB_TIMEOUT=<%= @timeout %>
 <% end -%>
-<% if @hidden_timeout -%>
+<% if defined?(@hidden_timeout) -%>
 GRUB_HIDDEN_TIMEOUT=<%= @hidden_timeout %>
 <% end -%>
-<% if @hidden_timeout_quiet -%>
-GRUB_HIDDEN_TIMEOUT_QUIET=<%= @hidden_timeout_quiet %>
+<% if defined?(@_hidden_timeout_quiet) -%>
+GRUB_HIDDEN_TIMEOUT_QUIET=<%= @_hidden_timeout_quiet %>
 <% end -%>
-<% if @default -%>
+<% if defined?(@default) -%>
 GRUB_DEFAULT="<%= @default %>"
 <% end -%>
-<% if @savedefault -%>
-GRUB_SAVEDEFAULT=<%= @savedefault %>
+<% if defined?(@_savedefault) -%>
+GRUB_SAVEDEFAULT=<%= @_savedefault %>
 <% end -%>
-<% if @background -%>
+<% if defined?(@background) -%>
 GRUB_BACKGROUND="<%= @background %>"
 <% end -%>
-<% if @disable_submenu -%>
-GRUB_DISABLE_SUBMENU=<%= @disable_submenu %>
+<% if defined?(@_disable_submenu) -%>
+GRUB_DISABLE_SUBMENU=<%= @_disable_submenu %>
 <% end -%>
-<% if @disable_os_prober -%>
-GRUB_DISABLE_OS_PROBER=<%= @disable_os_prober %>
+<% if defined?(@_disable_os_prober) -%>
+GRUB_DISABLE_OS_PROBER=<%= @_disable_os_prober %>
 <% end -%>
-<% if @serial_command -%>
+<% if defined?(@serial_command) -%>
 GRUB_SERIAL_COMMAND="<%= @serial_command %>"
 <% end -%>
-<% if @terminal -%>
+<% if defined?(@terminal) -%>
 GRUB_TERMINAL="<%= @terminal %>"
 <% end -%>
-<% if @terminal_input -%>
+<% if defined?(@terminal_input) -%>
 GRUB_TERMINAL_INPUT="<%= @terminal_input %>"
 <% end -%>
-<% if @terminal_output -%>
+<% if defined?(@terminal_output) -%>
 GRUB_TERMINAL_OUTPUT="<%= @terminal_output %>"
 <% end -%>
-<% if @cmdline_linux_base -%>
-GRUB_CMDLINE_LINUX="<%if @all_cmdline_linux_extra -%><% @all_cmdline_linux_extra.sort.each do |item| -%><%= item %> <% end -%><% end -%><%if @cmdline_linux_crashkernel -%>crashkernel=<%= @cmdline_linux_crashkernel %> <% end -%><%= @cmdline_linux_base %>"
+<% if defined?(@cmdline_linux_base) -%>
+GRUB_CMDLINE_LINUX="<%if defined?(@all_cmdline_linux_extra) -%><% @all_cmdline_linux_extra.sort.each do |item| -%><%= item %> <% end -%><% end -%><%if defined?(@cmdline_linux_crashkernel) -%>crashkernel=<%= @cmdline_linux_crashkernel %> <% end -%><%= @cmdline_linux_base %>"
 <% end -%>
-<% if @disable_recovery -%>
-GRUB_DISABLE_RECOVERY=<%= @disable_recovery %>
+<% if defined?(@_disable_recovery) -%>
+GRUB_DISABLE_RECOVERY=<%= @_disable_recovery %>
 <% end -%>
