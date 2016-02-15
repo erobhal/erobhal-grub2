@@ -395,28 +395,6 @@ EOF
       end
     end
 
-    context 'setting :superuser_pw_clear without a :superuser_name' do
-    let(:params) { {
-      :superuser_name => :undef,
-      :superuser_pw_clear => 'someting',
-    } }
-      it 'should fail' do
-        expect {
-          should contain_class('grub2')
-        }.to raise_error(Puppet::Error,/require superuser_name to be set/)
-      end
-    end
-    context 'setting :superuser_pw_pbkdf2 without a :superuser_name' do
-    let(:params) { {
-      :superuser_name => :undef,
-      :superuser_pw_pbkdf2 => 'someting',
-    } }
-      it 'should fail' do
-        expect {
-          should contain_class('grub2')
-        }.to raise_error(Puppet::Error,/require superuser_name to be set/)
-      end
-    end
     context 'setting both :superuser_pw_clear and :superuser_pw_pbkdf2' do
     let(:params) { {
       :superuser_name => 'somebody',
