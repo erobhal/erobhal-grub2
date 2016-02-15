@@ -12,6 +12,12 @@
 #
 
 class grub2 (
+  $grub2_sysconfig_file         = $grub2::params::grub2_sysconfig_file,
+  $grub2_sysconfig_link         = $grub2::params::grub2_sysconfig_link,
+  $grub2_mkconfig_command       = $grub2::params::grub2_mkconfig_command,
+  $grub2_configfile_bios        = $grub2::params::grub2_configfile_bios,
+  $grub2_configfile_efi         = $grub2::params::grub2_configfile_efi,
+  $grub2_configfile_users       = $grub2::params::grub2_configfile_users,
   $config_template              = $grub2::params::config_template,
   $users_template               = $grub2::params::users_template,
   $superuser_name               = $grub2::params::superuser_name,
@@ -83,6 +89,21 @@ class grub2 (
   }
   unless $users_template != undef and is_string($users_template) {
     fail('Parameter users_template has wrong input type. It is mandatory and should be string.')
+  }
+  unless $grub2_sysconfig_file != undef and is_absolute_path($grub2_sysconfig_file) {
+    fail('Parameter grub2_sysconfig_file has wrong input type. It is mandatory and should be absolute path.')
+  }
+  unless $grub2_mkconfig_command != undef and is_string($grub2_mkconfig_command) {
+    fail('Parameter grub2_mkconfig_command has wrong input type. It is mandatory and should be string.')
+  }
+  unless $grub2_configfile_bios != undef and is_absolute_path($grub2_configfile_bios) {
+    fail('Parameter grub2_configfile_bios has wrong input type. It is mandatory and should be absolute path.')
+  }
+  unless $grub2_configfile_efi != undef and is_absolute_path($grub2_configfile_efi) {
+    fail('Parameter grub2_configfile_efi has wrong input type. It is mandatory and should be absolute path.')
+  }
+  unless $grub2_configfile_users != undef and is_absolute_path($grub2_configfile_users) {
+    fail('Parameter grub2_configfile_users has wrong input type. It is mandatory and should be absolute path.')
   }
   unless $_efi_boot != undef and is_bool($_efi_boot) {
     fail('Fact efi_boot has wrong input type. It is mandatory and should be boolean.')
@@ -156,13 +177,13 @@ class grub2 (
   if ($::operatingsystem == 'RedHat' and $::operatingsystemmajrelease == '7') {
 
     if ($_efi_boot) {
-      $mkconfig_output = '/boot/efi/EFI/redhat/grub.cfg'
+      $mkconfig_output = $grub2_configfile_efi
     }
     else {
-      $mkconfig_output = '/boot/grub2/grub.cfg'
+      $mkconfig_output = $grub2_configfile_bios
     }
 
-    file {'/etc/default/grub':
+    file { $grub2_sysconfig_file:
       ensure  => present,
       content => template($config_template),
       owner   => 'root',
@@ -171,15 +192,17 @@ class grub2 (
       notify  => Exec['mkconfig_grub2'],
     }
 
-    file {'/etc/sysconfig/grub':
-      ensure  => 'link',
-      target  => '/etc/default/grub',
-      require => File['/etc/default/grub'],
+    if ($grub2_sysconfig_link) {
+      file { $grub2_sysconfig_link:
+        ensure  => 'link',
+        target  => $grub2_sysconfig_file,
+        require => File[$grub2_sysconfig_file],
+      }
     }
 
     if ($superuser_name != undef) {
       if ($superuser_pw_pbkdf2 != undef or $superuser_pw_clear != undef) {
-        file {'/etc/grub.d/01_users':
+        file { $grub2_configfile_users:
           ensure  => present,
           content => template($users_template),
           owner   => 'root',
@@ -190,17 +213,17 @@ class grub2 (
       }
     }
     else {
-        file {'/etc/grub.d/01_users':
+        file { $grub2_configfile_users:
           ensure => absent,
           notify => Exec['mkconfig_grub2'],
         }
     }
 
-
     exec {'mkconfig_grub2':
-      command     => "/usr/sbin/grub2-mkconfig --output=${mkconfig_output}",
+      command     => "${grub2_mkconfig_command} --output=${mkconfig_output}",
       refreshonly => true,
     }
+
   } else {
     notify {"This grub2 module supports RedHat 7, you are running ${::operatingsystem} ${::operatingsystemmajrelease}":}
   }

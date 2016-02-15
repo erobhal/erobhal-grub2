@@ -214,6 +214,58 @@ EOF
         }.to raise_error(Puppet::Error,/wrong input type/)
       end
     end
+
+    context 'sending wrong type to parameter :grub2_sysconfig_file' do
+    let(:params) { {
+      :grub2_sysconfig_file => 's/path',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :grub2_mkconfig_command' do
+    let(:params) { {
+      :grub2_mkconfig_command => false,
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :grub2_configfile_bios' do
+    let(:params) { {
+      :grub2_configfile_bios => 'a/path',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :grub2_configfile_efi' do
+    let(:params) { {
+      :grub2_configfile_efi => 'a/path',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+    context 'sending wrong type to parameter :grub2_configfile_users' do
+    let(:params) { {
+      :grub2_configfile_users => 'a/path',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
+
     context 'sending wrong type to parameter :superuser_name' do
     let(:params) { {
       :superuser_name => false,
@@ -421,6 +473,12 @@ EOF
     let(:params) { {
       :config_template => 'grub2/grub.erb',
       :users_template => 'grub2/01_users.erb',
+      :grub2_sysconfig_file => '/etc/default/grub',
+      :grub2_sysconfig_link => '/etc/sysconfig/grub',
+      :grub2_mkconfig_command => '/usr/sbin/grub2-mkconfig',
+      :grub2_configfile_bios => '/boot/grub2/grub.cfg',
+      :grub2_configfile_efi => '/boot/efi/EFI/redhat/grub.cfg',
+      :grub2_configfile_users => '/etc/grub.d/01_users',
     } }
     it { should contain_notify('This grub2 module supports RedHat 7, you are running WrongOS 0')}
   end
