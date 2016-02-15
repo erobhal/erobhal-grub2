@@ -204,6 +204,16 @@ EOF
         }.to raise_error(Puppet::Error,/wrong input type/)
       end
     end
+    context 'sending wrong type to fact :efi_boot' do
+    let(:facts) { {
+      :efi_boot => 'yes',
+    } }
+      it 'should fail' do
+        expect {
+          should contain_class('grub2')
+        }.to raise_error(Puppet::Error,/wrong input type/)
+      end
+    end
     context 'sending wrong type to parameter :superuser_name' do
     let(:params) { {
       :superuser_name => false,
@@ -390,7 +400,7 @@ EOF
       :superuser_name => :undef,
       :superuser_pw_clear => 'someting',
     } }
-      it '' do
+      it 'should fail' do
         expect {
           should contain_class('grub2')
         }.to raise_error(Puppet::Error,/require superuser_name to be set/)
@@ -401,7 +411,7 @@ EOF
       :superuser_name => :undef,
       :superuser_pw_pbkdf2 => 'someting',
     } }
-      it '' do
+      it 'should fail' do
         expect {
           should contain_class('grub2')
         }.to raise_error(Puppet::Error,/require superuser_name to be set/)
@@ -413,7 +423,7 @@ EOF
       :superuser_pw_pbkdf2 => 'something',
       :superuser_pw_clear => 'someting',
     } }
-      it '' do
+      it 'should fail' do
         expect {
           should contain_class('grub2')
         }.to raise_error(Puppet::Error,/superuser_pw_clear and superuser_pw_pbkdf2 can not be set at the same time/)

@@ -82,10 +82,10 @@ class grub2 (
     fail('Parameter config_template has wrong input type. It is mandatory and should be string.')
   }
   unless $users_template != undef and is_string($users_template) {
-    fail('Parameter users_template has wrong input type. It is mandatory and should be absolute string.')
+    fail('Parameter users_template has wrong input type. It is mandatory and should be string.')
   }
   unless $_efi_boot != undef and is_bool($_efi_boot) {
-    fail('Fact efi_boot has wrong input type. It is mandatory and should be absolute boolean.')
+    fail('Fact efi_boot has wrong input type. It is mandatory and should be boolean.')
   }
 
   # Optional parameters
