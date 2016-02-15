@@ -144,12 +144,12 @@ class grub2 (
     fail('Parameter disable_os_prober has wrong input type. Should be boolean.')
   }
 
-  if $superuser_pw_clear != undef or $superuser_pw_pbkdf2 {
+  if $superuser_pw_clear != undef or $superuser_pw_pbkdf2 != undef {
     if $superuser_name == undef {
       fail('Parameters superuser_pw require superuser_name to be set.')
     }
   }
-  if $superuser_pw_clear != undef and $superuser_pw_pbkdf2 {
+  if $superuser_pw_clear != undef and $superuser_pw_pbkdf2 != undef {
     fail('Both superuser_pw_clear and superuser_pw_pbkdf2 can not be set at the same time.')
   }
 

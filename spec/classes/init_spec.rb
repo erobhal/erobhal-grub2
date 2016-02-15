@@ -417,7 +417,7 @@ EOF
         }.to raise_error(Puppet::Error,/require superuser_name to be set/)
       end
     end
-    context 'setting both :superuser_pw_clear and :superuser_pw_pbkdf2 set' do
+    context 'setting both :superuser_pw_clear and :superuser_pw_pbkdf2' do
     let(:params) { {
       :superuser_name => 'somebody',
       :superuser_pw_pbkdf2 => 'something',
