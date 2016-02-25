@@ -83,105 +83,16 @@ class grub2 (
     $_efi_boot = $::efi_boot
   }
 
-  # Mandatory parameters
-  unless $config_template != undef and is_string($config_template) {
-    fail('Parameter config_template has wrong input type. It is mandatory and should be string.')
-  }
-  unless $users_template != undef and is_string($users_template) {
-    fail('Parameter users_template has wrong input type. It is mandatory and should be string.')
-  }
-  unless $grub2_sysconfig_file != undef and is_absolute_path($grub2_sysconfig_file) {
-    fail('Parameter grub2_sysconfig_file has wrong input type. It is mandatory and should be absolute path.')
-  }
-  unless $grub2_mkconfig_command != undef and is_string($grub2_mkconfig_command) {
-    fail('Parameter grub2_mkconfig_command has wrong input type. It is mandatory and should be string.')
-  }
-  unless $grub2_configfile_bios != undef and is_absolute_path($grub2_configfile_bios) {
-    fail('Parameter grub2_configfile_bios has wrong input type. It is mandatory and should be absolute path.')
-  }
-  unless $grub2_configfile_efi != undef and is_absolute_path($grub2_configfile_efi) {
-    fail('Parameter grub2_configfile_efi has wrong input type. It is mandatory and should be absolute path.')
-  }
-  unless $grub2_configfile_users != undef and is_absolute_path($grub2_configfile_users) {
-    fail('Parameter grub2_configfile_users has wrong input type. It is mandatory and should be absolute path.')
-  }
-  unless $_efi_boot != undef and is_bool($_efi_boot) {
-    fail('Fact efi_boot has wrong input type. It is mandatory and should be boolean.')
-  }
+  include grub2::params::verify
 
-  # Optional parameters
-  unless $superuser_name == undef or is_string($superuser_name) {
-    fail('Parameter superuser_name has wrong input type. Should be string.')
+  if ($_efi_boot) {
+    $mkconfig_output = $grub2_configfile_efi
   }
-  unless $superuser_pw_clear == undef or is_string($superuser_pw_clear) {
-    fail('Parameter superuser_pw_clear has wrong input type. Should be string.')
-  }
-  unless $superuser_pw_pbkdf2 == undef or is_string($superuser_pw_pbkdf2) {
-    fail('Parameter superuser_pw_pbkdf2 has wrong input type. Should be string.')
-  }
-  unless $cmdline_linux_base == undef or is_string($cmdline_linux_base) {
-    fail('Parameter cmdline_linux_base has wrong input type. Should be string.')
-  }
-  unless $all_cmdline_linux_extra == undef or is_array($all_cmdline_linux_extra) {
-    fail('Parameter all_cmdline_linux_extra has wrong input type. Should be array.')
-  }
-  unless $timeout == undef or is_numeric($timeout) {
-    fail('Parameter timeout has wrong input type. Should be numeric.')
-  }
-  unless $hidden_timeout == undef or is_numeric($hidden_timeout) {
-    fail('Parameter hidden_timeout has wrong input type. Should be numeric.')
-  }
-  unless $_hidden_timeout_quiet == undef or is_bool($_hidden_timeout_quiet) {
-    fail('Parameter hidden_timeout_quiet has wrong input type. Should be boolean.')
-  }
-  unless $default == undef or is_string($default) {
-    fail('Parameter default has wrong input type. Should be string.')
-  }
-  unless $_savedefault == undef or is_bool($_savedefault) {
-    fail('Parameter savedefault has wrong input type. Should be boolean.')
-  }
-  unless $background == undef or is_absolute_path($background) {
-    fail('Parameter background has wrong input type. Should be absolute path.')
-  }
-  unless $serial_command == undef or is_string($serial_command) {
-    fail('Parameter serial_command has wrong input type. Should be string.')
-  }
-  unless $terminal == undef or is_string($terminal) {
-    fail('Parameter terminal has wrong input type. Should be string.')
-  }
-  unless $terminal_input == undef or is_string($terminal_input) {
-    fail('Parameter terminal_input has wrong input type. Should be string.')
-  }
-  unless $terminal_output == undef or is_string($terminal_output) {
-    fail('Parameter terminal_output has wrong input type. Should be string.')
-  }
-  unless $_disable_recovery == undef or is_bool($_disable_recovery) {
-    fail('Parameter disable_recovery has wrong input type. Should be boolean.')
-  }
-  unless $_disable_submenu == undef or is_bool($_disable_submenu) {
-    fail('Parameter disable_submenu has wrong input type. Should be boolean.')
-  }
-  unless $_disable_os_prober == undef or is_bool($_disable_os_prober) {
-    fail('Parameter disable_os_prober has wrong input type. Should be boolean.')
-  }
-
-  if $superuser_pw_clear != undef or $superuser_pw_pbkdf2 != undef {
-    if $superuser_name == undef {
-      fail('Parameters superuser_pw require superuser_name to be set.')
-    }
-  }
-  if $superuser_pw_clear != undef and $superuser_pw_pbkdf2 != undef {
-    fail('Both superuser_pw_clear and superuser_pw_pbkdf2 can not be set at the same time.')
+  else {
+    $mkconfig_output = $grub2_configfile_bios
   }
 
   if ($::operatingsystem == 'RedHat' and $::operatingsystemmajrelease == '7') {
-
-    if ($_efi_boot) {
-      $mkconfig_output = $grub2_configfile_efi
-    }
-    else {
-      $mkconfig_output = $grub2_configfile_bios
-    }
 
     file { $grub2_sysconfig_file:
       ensure  => present,
