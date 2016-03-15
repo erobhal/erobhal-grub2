@@ -184,17 +184,6 @@ EOF
       end
     end
 
-    context 'getting wrong type from fact :efi_boot' do
-    let(:facts) { {
-      :efi_boot => 'yes',
-    } }
-      it 'should fail' do
-        expect {
-          should contain_class('grub2')
-        }.to raise_error(Puppet::Error,/wrong input type/)
-      end
-    end
-
     it { should compile.with_all_deps }
 
   end
