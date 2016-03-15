@@ -3,7 +3,7 @@ require 'facter'
 
 Facter.add('efi_boot') do
   setcode do
-    if File.directory? "/boot/efi"
+    if File.exist? "/sys/firmware/efi"
       "true"
     else
       "false"
