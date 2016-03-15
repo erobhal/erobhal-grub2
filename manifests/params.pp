@@ -49,12 +49,6 @@ class grub2::params {
     }
     default: {
       # Not on a supported OS
-      $grub2_sysconfig_file   = '/etc/default/grub'
-      $grub2_sysconfig_link   = '/etc/sysconfig/grub'
-      $grub2_mkconfig_command = '/usr/sbin/grub2-mkconfig'
-      $grub2_configfile_bios  = '/boot/grub2/grub.cfg'
-      $grub2_configfile_efi   = '/boot/efi/EFI/redhat/grub.cfg'
-      $grub2_configfile_users = '/etc/grub.d/01_users'
     }
   }
 }
