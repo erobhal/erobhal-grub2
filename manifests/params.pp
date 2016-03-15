@@ -49,6 +49,7 @@ class grub2::params {
     }
     default: {
       # Not on a supported OS
+      $grub2_sysconfig_file   = '/etc/default/grub'
     }
   }
 }
