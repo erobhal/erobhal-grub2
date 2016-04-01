@@ -1,6 +1,6 @@
 {
   "name": "erobhal-grub2",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "author": "Robert Hallgren",
   "summary": "Handle grub2 on Linux",
   "license": "Apache-2.0",
