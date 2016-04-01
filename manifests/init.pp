@@ -136,7 +136,7 @@ class grub2 (
     }
 
   } else {
-    notify {"This grub2 module supports RedHat 7, you are running ${::operatingsystem} ${::operatingsystemmajrelease}":}
+    fail ("This grub2 module supports RedHat 7, you are running ${::operatingsystem} ${::operatingsystemmajrelease}")
   }
 }
 

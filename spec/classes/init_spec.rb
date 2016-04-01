@@ -194,7 +194,11 @@ EOF
       :operatingsystemmajrelease => '0',
       :efi_boot => false,
     } }
-    it { should contain_notify('This grub2 module supports RedHat 7, you are running WrongOS 0')}
+    it 'should fail' do
+      expect {
+        should contain_class('grub2')
+      }.to raise_error(Puppet::Error,/This grub2 module supports RedHat 7, you are running WrongOS 0/)
+    end
   end
 end
 
