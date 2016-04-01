@@ -38,7 +38,7 @@ class grub2::params::verify (
   $disable_recovery             = $grub2::_disable_recovery,
   $disable_submenu              = $grub2::_disable_submenu,
   $disable_os_prober            = $grub2::_disable_os_prober,
-) {
+) inherits grub2 {
 
   # Mandatory parameters
   unless $config_template != undef and is_string($config_template) {
