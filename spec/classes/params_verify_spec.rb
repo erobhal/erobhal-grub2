@@ -6,6 +6,7 @@ describe 'grub2::params::verify' do
     let(:facts) { {
       :operatingsystem => 'RedHat',
       :operatingsystemmajrelease => '7',
+      :efi_boot => false,
     } }
 
     context 'sending wrong type to parameter :config_template' do
