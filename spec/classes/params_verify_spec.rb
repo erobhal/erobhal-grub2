@@ -33,7 +33,7 @@ describe 'grub2::params::verify' do
 
     context 'sending wrong type to parameter :grub2_sysconfig_file' do
     let(:params) { {
-      :grub2_sysconfig_file => 's/path',
+      :grub2_sysconfig_file => false,
     } }
       it 'should fail' do
         expect {
@@ -55,7 +55,7 @@ describe 'grub2::params::verify' do
 
     context 'sending wrong type to parameter :grub2_configfile_bios' do
     let(:params) { {
-      :grub2_configfile_bios => 'a/path',
+      :grub2_configfile_bios => false,
     } }
       it 'should fail' do
         expect {
@@ -66,7 +66,7 @@ describe 'grub2::params::verify' do
 
     context 'sending wrong type to parameter :grub2_configfile_efi' do
     let(:params) { {
-      :grub2_configfile_efi => 'a/path',
+      :grub2_configfile_efi => false,
     } }
       it 'should fail' do
         expect {
@@ -77,7 +77,7 @@ describe 'grub2::params::verify' do
 
     context 'sending wrong type to parameter :grub2_configfile_users' do
     let(:params) { {
-      :grub2_configfile_users => 'a/path',
+      :grub2_configfile_users => false,
     } }
       it 'should fail' do
         expect {
@@ -198,7 +198,7 @@ describe 'grub2::params::verify' do
 
     context 'sending wrong type to parameter :background' do
     let(:params) { {
-      :background => 'a/path',
+      :background => false,
     } }
       it 'should fail' do
         expect {

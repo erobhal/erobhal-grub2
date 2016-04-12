@@ -47,19 +47,19 @@ class grub2::params::verify (
   unless $users_template != undef and is_string($users_template) {
     fail('Parameter users_template has wrong input type. It is mandatory and should be string.')
   }
-  unless $grub2_sysconfig_file != undef and is_absolute_path($grub2_sysconfig_file) {
+  unless $grub2_sysconfig_file != undef and is_string($grub2_sysconfig_file) {
     fail('Parameter grub2_sysconfig_file has wrong input type. It is mandatory and should be absolute path.')
   }
   unless $grub2_mkconfig_command != undef and is_string($grub2_mkconfig_command) {
     fail('Parameter grub2_mkconfig_command has wrong input type. It is mandatory and should be string.')
   }
-  unless $grub2_configfile_bios != undef and is_absolute_path($grub2_configfile_bios) {
+  unless $grub2_configfile_bios != undef and is_string($grub2_configfile_bios) {
     fail('Parameter grub2_configfile_bios has wrong input type. It is mandatory and should be absolute path.')
   }
-  unless $grub2_configfile_efi != undef and is_absolute_path($grub2_configfile_efi) {
+  unless $grub2_configfile_efi != undef and is_string($grub2_configfile_efi) {
     fail('Parameter grub2_configfile_efi has wrong input type. It is mandatory and should be absolute path.')
   }
-  unless $grub2_configfile_users != undef and is_absolute_path($grub2_configfile_users) {
+  unless $grub2_configfile_users != undef and is_string($grub2_configfile_users) {
     fail('Parameter grub2_configfile_users has wrong input type. It is mandatory and should be absolute path.')
   }
 
@@ -94,7 +94,7 @@ class grub2::params::verify (
   unless $savedefault == undef or is_bool($savedefault) {
     fail('Parameter savedefault has wrong input type. Should be boolean.')
   }
-  unless $background == undef or is_absolute_path($background) {
+  unless $background == undef or is_string($background) {
     fail('Parameter background has wrong input type. Should be absolute path.')
   }
   unless $serial_command == undef or is_string($serial_command) {
