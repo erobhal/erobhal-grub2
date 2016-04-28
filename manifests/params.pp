@@ -22,7 +22,7 @@ class grub2::params {
   }
 
   case $::operatingsystem {
-    'RedHat': {
+    'RedHat','CentOS': {
       $grub2_sysconfig_file   = '/etc/default/grub'
       $grub2_sysconfig_link   = '/etc/sysconfig/grub'
       $grub2_mkconfig_command = '/usr/sbin/grub2-mkconfig'

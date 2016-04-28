@@ -92,7 +92,7 @@ class grub2 (
     $mkconfig_output = $grub2_configfile_bios
   }
 
-  if ($::operatingsystem == 'RedHat' and $::operatingsystemmajrelease == '7') {
+  if (($::operatingsystem == 'RedHat' or $::operatingsystem == 'CentOS') and $::operatingsystemmajrelease == '7') {
 
     file { $grub2_sysconfig_file:
       ensure  => present,
@@ -136,7 +136,7 @@ class grub2 (
     }
 
   } else {
-    fail ("This grub2 module supports RedHat 7, you are running ${::operatingsystem} ${::operatingsystemmajrelease}")
+    fail ("This grub2 module supports RedHat 7 and CentOS 7, you are running ${::operatingsystem} ${::operatingsystemmajrelease}")
   }
 }
 
